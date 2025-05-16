@@ -1,6 +1,6 @@
 <?php
 //Default Configuration
-$CONFIG = '{"lang":"en","error_reporting":false,"show_hidden":false,"hide_Cols":false,"theme":"light"}';
+$CONFIG = '{"lang":"es","error_reporting":false,"show_hidden":false,"hide_Cols":true,"theme":"dark"}';
 
 /**
  * H3K ~ Tiny File Manager V2.6
@@ -13,7 +13,7 @@ $CONFIG = '{"lang":"en","error_reporting":false,"show_hidden":false,"hide_Cols":
 define('VERSION', '2.6');
 
 //Application Title
-define('APP_TITLE', 'Tiny File Manager');
+define('APP_TITLE', 'S3 File Manager');
 
 // --- EDIT BELOW CONFIGURATION CAREFULLY ---
 
@@ -149,6 +149,17 @@ if (is_readable($config_file)) {
     @include($config_file);
 }
 
+// Use compose for read .env
+require_once realpath(__DIR__ . "/vendor/autoload.php");
+use Dotenv\Dotenv;
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$s3accessKey = $_ENV['S3_ACCESS_KEY'];
+$s3secretKey = $_ENV['S3_SECRET_KEY'];
+$s3hostName = $_ENV['S3_HOST_NAME'];
+$s3hostBucket = $_ENV['S3_HOST_BUCKET'];
+
 // External CDN resources that can be used in the HTML (replace for GDPR compliance)
 $external = array(
     'css-bootstrap' => '<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">',
@@ -200,7 +211,9 @@ define('FM_THEME', $theme);
 
 //available languages
 $lang_list = array(
-    'en' => 'English'
+    'en' => 'English',
+    'es' => 'Español'
+
 );
 
 if ($report_errors == true) {
@@ -357,17 +370,10 @@ if ($use_auth) {
                                 <form class="form-signin" action="" method="post" autocomplete="off">
                                     <div class="mb-3">
                                         <div class="brand">
-                                            <svg version="1.0" xmlns="http://www.w3.org/2000/svg" M1008 width="100%" height="80px" viewBox="0 0 238.000000 140.000000" aria-label="H3K Tiny File Manager">
-                                                <g transform="translate(0.000000,140.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
-                                                    <path d="M160 700 l0 -600 110 0 110 0 0 260 0 260 70 0 70 0 0 -260 0 -260 110 0 110 0 0 600 0 600 -110 0 -110 0 0 -260 0 -260 -70 0 -70 0 0 260 0 260 -110 0 -110 0 0 -600z" />
-                                                    <path fill="#003500" d="M1008 1227 l-108 -72 0 -117 0 -118 110 0 110 0 0 110 0 110 70 0 70 0 0 -180 0 -180 -125 0 c-69 0 -125 -3 -125 -6 0 -3 23 -39 52 -80 l52 -74 73 0 73 0 0 -185 0 -185 -70 0 -70 0 0 115 0 115 -110 0 -110 0 0 -190 0 -190 181 0 181 0 109 73 108 72 1 181 0 181 -69 48 -68 49 68 50 69 49 0 249 0 248 -182 -1 -183 0 -107 -72z" />
-                                                    <path d="M1640 700 l0 -600 110 0 110 0 0 208 0 208 35 34 35 34 35 -34 35 -34 0 -208 0 -208 110 0 110 0 0 212 0 213 -87 87 -88 88 88 88 87 87 0 213 0 212 -110 0 -110 0 0 -208 0 -208 -70 -69 -70 -69 0 277 0 277 -110 0 -110 0 0 -600z" />
-                                                </g>
-                                            </svg>
-                                        </div>
-                                        <div class="text-center">
+                                        <img src="./resources/s3-file-manager-loginlogo.png" alt="S3 File Manager"
+                                        style="width: 300px; height: auto;" />                                        <!-- <div class="text-center">
                                             <h1 class="card-title"><?php echo APP_TITLE; ?></h1>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <hr />
                                     <div class="mb-3">
@@ -392,9 +398,18 @@ if ($use_auth) {
                                 </form>
                             </div>
                         </div>
-                        <div class="footer text-center">
-                            &mdash;&mdash; &copy;
-                            <a href="https://tinyfilemanager.github.io/" target="_blank" class="text-decoration-none text-muted" data-version="<?php echo VERSION; ?>">CCP Programmers</a> &mdash;&mdash;
+                        <div class="footer text-center text-muted">
+                          <div>&mdash;&mdash; &copy;</div>
+                          <div>
+                            <a href="https://tinyfilemanager.github.io/" target="_blank" class="text-decoration-none text-muted" data-version="<?php echo VERSION; ?>">
+                              Develop by: CCP Programmers
+                            </a>
+                          </div>
+                          <div>
+                            <a href="https://github.com/jesusalbujas" target="_blank" class="text-decoration-none text-muted">
+                              Implemented by: jalbujas
+                            </a>
+                          </div>
                         </div>
                     </div>
                 </div>
@@ -538,6 +553,7 @@ if ((isset($_SESSION[FM_SESSION_ID]['logged'], $auth_users[$_SESSION[FM_SESSION_
         fm_get_translations([]);
         if (!array_key_exists($newLng, $lang_list)) {
             $newLng = 'en';
+            $newLng = 'es';
         }
 
         $erp = isset($_POST['js-error-report']) && $_POST['js-error-report'] == "true" ? true : false;
@@ -692,6 +708,88 @@ if (isset($_GET['del'], $_POST['token']) && !FM_READONLY) {
     $FM_PATH = FM_PATH;
     fm_redirect(FM_SELF_URL . '?p=' . urlencode($FM_PATH));
 }
+
+// Upload to S3
+if (isset($_POST['group'], $_POST['upload_to_s3'], $_POST['token']) && !FM_READONLY) {
+
+    if (!verifyToken($_POST['token'])) {
+        fm_set_msg(lng("Invalid Token."), 'error');
+    }
+
+    $path = FM_ROOT_PATH;
+    $folder = FM_PATH;
+    if ($folder != '') {
+        $path .= '/' . $folder;
+    }
+
+    $errors = 0;
+    $uploadedLinks = []; // <- enlaces firmados
+    $files = $_POST['file'];
+    $expiration = time() + 31536000; // 1 año (segundos)
+
+    if (is_array($files) && count($files)) {
+        foreach ($files as $f) {
+            if ($f != '') {
+                $file_path = $path . '/' . $f;
+                if (file_exists($file_path)) {
+                    $escaped_file_path = escapeshellarg($file_path);
+                    $s3_object_path = "s3://erpya/{$folder}/videos/{$f}";
+                    $escaped_s3_path = escapeshellarg($s3_object_path);
+
+                    // Upload file to S3
+                    $cmd = "s3cmd --access_key=$s3accessKey --secret_key=$s3secretKey --host=$s3hostName --host-bucket=$s3hostName put $escaped_file_path $escaped_s3_path";
+                    $output = [];
+                    $return_var = -1;
+                    exec($cmd, $output, $return_var);
+
+                    if ($return_var === 0) {
+                        // Generate signed URL
+                        $signCmd = "s3cmd --access_key=$s3accessKey --secret_key=$s3secretKey --host=$s3hostName --host-bucket=$s3hostName signurl $s3_object_path $expiration";
+                        $signOutput = [];
+                        $signReturn = -1;
+                        exec($signCmd, $signOutput, $signReturn);
+
+                        if ($signReturn === 0 && isset($signOutput[0])) {
+                            $uploadedLinks[] = trim($signOutput[0]);
+                        } else {
+                            $errors++;
+                        }
+                    } else {
+                        $errors++;
+                    }
+                } else {
+                    $errors++;
+                }
+            }
+        }
+
+        header('Content-Type: application/json');
+
+        if ($errors === 0 && !empty($uploadedLinks)) {
+            echo json_encode([
+                'success' => true,
+                'message' => lng('Selected files uploaded to S3.'),
+                'links' => $uploadedLinks
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false,
+                'message' => lng('Some files could not be uploaded.'),
+                'links' => $uploadedLinks
+            ]);
+        }
+        exit;
+    } else {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => lng('Nothing selected'),
+            'links' => []
+        ]);
+        exit;
+    }
+}
+
 
 // Create a new file/folder
 if (isset($_POST['newfilename'], $_POST['newfile'], $_POST['token']) && !FM_READONLY) {
@@ -1666,7 +1764,7 @@ if (isset($_GET['help'])) {
                 <div class="row">
                     <div class="col-xs-12 col-sm-6">
                         <p>
-                        <h3><a href="https://github.com/prasathmani/tinyfilemanager" target="_blank" class="app-v-title"> Tiny File Manager <?php echo VERSION; ?></a></h3>
+                        <h3><a href="https://github.com/prasathmani/tinyfilemanager" target="_blank" class="app-v-title"> S3 File Manager <?php echo VERSION; ?></a></h3>
                         </p>
                         <p>Author: PRAŚATH MANİ</p>
                         <p>Mail Us: <a href="mailto:ccpprogrammers@gmail.com">ccpprogrammers [at] gmail [dot] com</a> </p>
@@ -2323,6 +2421,7 @@ $all_files_size = 0;
                     <a href="#/select-all" class="btn btn-small btn-outline-primary btn-2" onclick="select_all();return false;"><i class="fa fa-check-square"></i> <?php echo lng('SelectAll') ?> </a>
                     <a href="#/unselect-all" class="btn btn-small btn-outline-primary btn-2" onclick="unselect_all();return false;"><i class="fa fa-window-close"></i> <?php echo lng('UnSelectAll') ?> </a>
                     <a href="#/invert-all" class="btn btn-small btn-outline-primary btn-2" onclick="invert_all();return false;"><i class="fa fa-th-list"></i> <?php echo lng('InvertSelection') ?> </a>
+                    <a href="#/upload-s3" class="btn btn-small btn-outline-primary btn-2" onclick="uploadToS3();return false;"><i class="fa fa-cloud-upload"></i> <?php echo lng('UploadtoS3') ?> </a>
                     <input type="submit" class="hidden" name="delete" id="a-delete" value="Delete" onclick="return confirm('<?php echo lng('Delete selected files and folders?'); ?>')">
                     <a href="javascript:document.getElementById('a-delete').click();" class="btn btn-small btn-outline-primary btn-2"><i class="fa fa-trash"></i> <?php echo lng('Delete') ?> </a>
                     <input type="submit" class="hidden" name="zip" id="a-zip" value="zip" onclick="return confirm('<?php echo lng('Create archive?'); ?>')">
@@ -2333,9 +2432,9 @@ $all_files_size = 0;
                     <a href="javascript:document.getElementById('a-copy').click();" class="btn btn-small btn-outline-primary btn-2"><i class="fa fa-files-o"></i> <?php echo lng('Copy') ?> </a>
                 </div>
             </div>
-            <div class="col-3 d-none d-sm-block"><a href="https://tinyfilemanager.github.io" target="_blank" class="float-right text-muted">Tiny File Manager <?php echo VERSION; ?></a></div>
+            <div class="col-3 d-none d-sm-block"><a href="https://tinyfilemanager.github.io" target="_blank" class="float-right text-muted">S3 File Manager <?php echo VERSION; ?></a></div>
         <?php else: ?>
-            <div class="col-12"><a href="https://tinyfilemanager.github.io" target="_blank" class="float-right text-muted">Tiny File Manager <?php echo VERSION; ?></a></div>
+            <div class="col-12"><a href="https://tinyfilemanager.github.io" target="_blank" class="float-right text-muted">S3 File Manager <?php echo VERSION; ?></a></div>
         <?php endif; ?>
     </div>
 </form>
@@ -3836,8 +3935,8 @@ function fm_show_header_login()
             }
 
             .fm-login-page .brand {
-                width: 121px;
-                overflow: hidden;
+                width: 275px;
+                /* overflow: hidden; */
                 margin: 0 auto;
                 position: relative;
                 z-index: 1
@@ -3848,7 +3947,7 @@ function fm_show_header_login()
             }
 
             .fm-login-page .card-wrapper {
-                width: 360px;
+                width: 600px;
             }
 
             .fm-login-page .card {
@@ -3894,7 +3993,7 @@ function fm_show_header_login()
                 }
 
                 .fm-login-page .card.fat .card-body {
-                    padding: 15px
+                    padding: 40px
                 }
             }
 
@@ -3987,7 +4086,7 @@ function fm_show_header_login()
         <?php if ($favicon_path) {
             echo '<link rel="icon" href="' . fm_enc($favicon_path) . '" type="image/png">';
         } ?>
-        <title><?php echo fm_enc(APP_TITLE) ?> | <?php echo (isset($_GET['view']) ? $_GET['view'] : ((isset($_GET['edit'])) ? $_GET['edit'] : "H3K")); ?></title>
+        <title><?php echo fm_enc(APP_TITLE) ?> | <?php echo (isset($_GET['view']) ? $_GET['view'] : ((isset($_GET['edit'])) ? $_GET['edit'] : "")); ?></title>
         <?php print_external('pre-jsdelivr'); ?>
         <?php print_external('pre-cloudflare'); ?>
         <?php print_external('css-bootstrap'); ?>
@@ -4778,6 +4877,35 @@ function fm_show_header_login()
                 </div>
             </div>
 
+<style>
+    /* Modal más ancho para enlaces largos */
+    #uploadProgressModal .modal-dialog {
+        max-width: 800px; /* o el ancho que prefieras */
+        width: 90vw;
+    }
+    /* Permitir que los enlaces se quiebren y no salgan del modal */
+    #uploadProgressModal .modal-body a {
+        word-break: break-all;
+    }
+</style>
+
+<!-- Upload Progress Modal -->
+<div class="modal modal-alert" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" id="uploadProgressModal" data-bs-theme="<?php echo FM_THEME; ?>">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-3 shadow">
+            <div class="modal-body p-4 text-center">
+                <h5 class="mb-0"><?php echo lng('Uploading files to S3...'); ?></h5>
+            </div>
+            <div class="modal-footer flex-nowrap p-0">
+                <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-12 m-0 rounded-0" disabled>
+                    <?php echo lng('Please wait...') ?>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
             <!-- Confirm Modal -->
             <script type="text/html" id="js-tpl-confirm">
                 <div class="modal modal-alert confirmDailog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" id="confirmDailog-<%this.id%>" data-bs-theme="<?php echo FM_THEME; ?>">
@@ -5153,6 +5281,112 @@ function fm_show_header_login()
                     $(target).removeClass('hidden');
                 });
             });
+
+function uploadToS3() {
+    const selectedFiles = [];
+    document.querySelectorAll('input[type="checkbox"][name="file[]"]:checked').forEach(checkbox => {
+        selectedFiles.push(checkbox.value);
+    });
+
+    if (selectedFiles.length === 0) {
+        alert("No files selected to upload.");
+        return;
+    }
+
+    if (!confirm("Are you sure you want to upload selected file(s) to S3?")) {
+        return;
+    }
+
+    const uploadModalEl = document.getElementById('uploadProgressModal');
+    const uploadModal = new bootstrap.Modal(uploadModalEl);
+    uploadModal.show();
+
+    uploadModalEl.querySelector('.modal-body').innerHTML = '<h5 class="mb-0">Uploading files to S3...</h5>';
+    uploadModalEl.querySelector('.modal-footer button').textContent = 'Please wait...';
+    uploadModalEl.querySelector('.modal-footer button').disabled = true;
+
+    const formData = new FormData();
+    formData.append("group", "1");
+    formData.append("upload_to_s3", "1");
+    formData.append("token", window.uploadToS3Token || "");
+
+    selectedFiles.forEach(filename => {
+        formData.append("file[]", filename);
+    });
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "", true);
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            try {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    // Mostrar enlaces dentro del modal
+                    let linksHtml = '<h5 class="mb-3 text-start">Upload complete. Download links:</h5><ul class="list-unstyled text-start">';
+                    response.links.forEach(link => {
+                        // Extraer solo la parte antes del '?'
+                        const displayLink = link.split('?')[0];
+
+                        // Crear item con link visible corto + botón copiar
+                        linksHtml += `
+                        <li class="d-flex align-items-center mb-2" style="gap: 10px;">
+                            <a href="${link}" target="_blank" rel="noopener noreferrer" style="flex-grow: 1; overflow-wrap: anywhere;">${displayLink}</a>
+                            <button class="btn btn-sm btn-outline-primary" type="button" onclick="copyToClipboard('${link}')">Copiar</button>
+                        </li>`;
+                    });
+                    linksHtml += '</ul>';
+
+                    uploadModalEl.querySelector('.modal-body').innerHTML = linksHtml;
+                    uploadModalEl.querySelector('.modal-footer button').textContent = 'Close';
+                    uploadModalEl.querySelector('.modal-footer button').disabled = false;
+
+                    uploadModalEl.querySelector('.modal-footer button').onclick = () => {
+                        uploadModal.hide();
+                    };
+                } else {
+                    alert('Upload failed: ' + response.message);
+                    uploadModal.hide();
+                }
+            } catch (e) {
+                alert('Invalid response from server.');
+                uploadModal.hide();
+            }
+        } else {
+            alert("Upload failed.");
+            uploadModal.hide();
+        }
+    };
+
+    xhr.onerror = function () {
+        alert("An error occurred during upload.");
+        uploadModal.hide();
+    };
+
+    xhr.send(formData);
+}
+
+// Función para copiar texto al portapapeles
+function copyToClipboard(text) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Copied to clipboard!');
+        }, () => {
+            alert('Failed to copy.');
+        });
+    } else {
+        // Fallback
+        const tempInput = document.createElement('input');
+        tempInput.value = text;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        alert('Copied to clipboard!');
+    }
+}
+
+
         </script>
 
         <?php if (isset($_GET['edit']) && isset($_GET['env']) && FM_EDIT_FILE && !FM_READONLY):
@@ -5516,6 +5750,7 @@ function fm_show_header_login()
         $tr['en']['Upload']         = 'Upload';
         $tr['en']['Cancel']         = 'Cancel';
         $tr['en']['InvertSelection'] = 'Invert Selection';
+        $tr['en']['UploadtoS3'] = 'Upload to S3';
         $tr['en']['DestinationFolder']  = 'Destination Folder';
         $tr['en']['ItemType']       = 'Item Type';
         $tr['en']['ItemName']       = 'Item Name';

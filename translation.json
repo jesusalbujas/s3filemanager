@@ -695,7 +695,15 @@
         "Files": "Archivos",
         "Change": "Cambiar",
         "Settings": "Preferencias",
-        "Language": "Lenguaje"
+        "Language": "Lenguaje",
+        "ErrorReporting": "Informe de errores",
+        "ShowHiddenFiles": "Mostrar Archivos Ocultos",
+        "HideColumns" : "Ocultar columnas de Permisos/Propietario",
+        "Theme": "Tema",
+        "dark": "Oscuro",
+        "light": "Claro",
+        "Help": "Ayuda",
+        "UploadtoS3": "Subir a S3"
       }
     },
     {
