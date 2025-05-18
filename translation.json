@@ -646,7 +646,7 @@
       "code": "es",
       "translation": {
         "AppName": "Pequeño Administrador de Archivos",
-        "AppTitle": "Administrador de Archivos",
+        "AppTitle": "S3 File Manager",
         "Login": "Iniciar Sesión",
         "Username": "Nombre de Usuario",
         "Password": "Contraseña",
@@ -703,7 +703,15 @@
         "dark": "Oscuro",
         "light": "Claro",
         "Help": "Ayuda",
-        "UploadtoS3": "Subir a S3"
+        "UploadtoS3": "Subir a S3",
+        "Login failed. Invalid username or password": "Inicio de sesión fallido. Usuario o contraseña inválida.",
+        "You are logged in": "¡Inicio de sesión éxitoso!",
+        "Advanced Search": "Búsqueda avanzada",
+        "Search file in folder and subfolders...": "Buscar arcivos en carpetas y subcarpetas...",
+        "No matching records found": "Al parecer no hay nada aquí",
+        "FullSize": "Tamaño total",
+        "Help Documents": "Documentación",
+        "Report Issue": "Reportar bugs"
       }
     },
     {
