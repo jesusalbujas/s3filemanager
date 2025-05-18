@@ -10,7 +10,7 @@ $CONFIG = '{"lang":"es","error_reporting":false,"show_hidden":false,"hide_Cols":
  */
 
 //TFM version
-define('VERSION', '2.6');
+define('VERSION', '1.0');
 
 //Application Title
 define('APP_TITLE', 'S3 File Manager');
@@ -1767,7 +1767,8 @@ if (isset($_GET['help'])) {
                         <h3><a href="https://github.com/prasathmani/tinyfilemanager" target="_blank" class="app-v-title"> S3 File Manager <?php echo VERSION; ?></a></h3>
                         </p>
                         <p>Author: PRAŚATH MANİ</p>
-                        <p>Mail Us: <a href="mailto:ccpprogrammers@gmail.com">ccpprogrammers [at] gmail [dot] com</a> </p>
+                        <p>Develop: Jesús Albujas</p>
+                        <p>Mail Us: <a href="mailto:jesusramirez35000@gmail.com"></a> jesusramirez35000@gmail.com </p>
                     </div>
                     <div class="col-xs-12 col-sm-6">
                         <div class="card">
@@ -3808,7 +3809,11 @@ function fm_show_nav_path($path)
     $isStickyNavBar = $sticky_navbar ? 'fixed-top' : '';
 ?>
     <nav class="navbar navbar-expand-lg mb-4 main-nav <?php echo $isStickyNavBar ?> bg-body-tertiary" data-bs-theme="<?php echo FM_THEME; ?>">
-        <a class="navbar-brand"> <?php echo lng('AppTitle') ?> </a>
+    <a class="navbar-brand" href="#">
+    <img src="./resources/s3filemanager-icon.png" alt="S3 File Manager" style="height: 32px; margin-right: 8px;">
+    <?php echo lng('AppTitle') ?>
+</a>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -5715,7 +5720,7 @@ function copyToClipboard(text) {
         global $lang;
 
         // English Language
-        $tr['en']['AppName']        = 'Tiny File Manager';
+        $tr['en']['AppName']        = 'S3 File Manager';
         $tr['en']['AppTitle']       = 'File Manager';
         $tr['en']['Login']          = 'Sign in';
         $tr['en']['Username']       = 'Username';
