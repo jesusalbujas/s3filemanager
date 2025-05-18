@@ -159,6 +159,9 @@ $s3accessKey = $_ENV['S3_ACCESS_KEY'];
 $s3secretKey = $_ENV['S3_SECRET_KEY'];
 $s3hostName = $_ENV['S3_HOST_NAME'];
 $s3hostBucket = $_ENV['S3_HOST_BUCKET'];
+$bucket = $_ENV['S3_BUCKET'];
+$directory = $_ENV['S3_DIRECTORY'];
+
 
 // External CDN resources that can be used in the HTML (replace for GDPR compliance)
 $external = array(
@@ -892,7 +895,7 @@ if (isset($_POST['group'], $_POST['upload_to_s3'], $_POST['token']) && !FM_READO
                 $file_path = $path . '/' . $f;
                 if (file_exists($file_path)) {
                     $escaped_file_path = escapeshellarg($file_path);
-                    $s3_object_path = "s3://erpya/{$folder}/videos/{$f}";
+                    $s3_object_path = "s3://$bucket/{$folder}/$directory/{$f}";
                     $escaped_s3_path = escapeshellarg($s3_object_path);
 
                     // Upload file to S3
