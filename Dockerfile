@@ -42,4 +42,6 @@ COPY auth_users.json ./
 
 COPY s3filemanager.php index.php
 
-CMD ["sh", "-c", "php -S 0.0.0.0:80"]
+WORKDIR /opt/files
+
+CMD ["php", "-S", "0.0.0.0:80", "-t", "/var/www/html"]
