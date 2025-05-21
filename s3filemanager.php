@@ -2558,9 +2558,16 @@ $all_files_size = 0;
 
             if (empty($folders) && empty($files)) { ?>
                 <tfoot>
-                    <tr><?php if (!FM_READONLY): ?>
-                            <td></td><?php endif; ?>
-                        <td colspan="<?php echo (!FM_IS_WIN && !$hide_Cols) ? '6' : '4' ?>"><em><?php echo lng('Folder is empty') ?></em></td>
+                    <tr>
+                        <?php if (!FM_READONLY): ?>
+                            <td></td>
+                        <?php endif; ?>
+                        <td colspan="<?php echo (!FM_IS_WIN && !$hide_Cols) ? '6' : '4' ?>">
+                            <em>
+                                <img src="resources/empty-folder.png" alt="Empty folder" style="vertical-align: middle; height: 50px; margin-right: 10px;">
+                                <?php echo lng('Folder is empty') ?>
+                            </em>
+                        </td>
                     </tr>
                 </tfoot>
             <?php
