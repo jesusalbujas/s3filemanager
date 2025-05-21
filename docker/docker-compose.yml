@@ -1,0 +1,16 @@
+services:
+
+  s3fm:
+    image: ${S3FM_IMAGE}
+    container_name: ${S3FM_NAME}
+    restart: ${GENERIC_RESTART}
+    ports:
+      - 8090:80
+    volumes:
+      - ./data:/opt/files/
+      - ./${S3FM_CONFIG}:/var/www/html/${S3FM_CONFIG}
+    networks:
+      - s3fm_network
+
+networks:
+  s3fm_network:
