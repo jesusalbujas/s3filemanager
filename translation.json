@@ -711,7 +711,9 @@
         "No matching records found": "Al parecer no hay nada aquí",
         "FullSize": "Tamaño total",
         "Help Documents": "Documentación",
-        "Report Issue": "Reportar bugs"
+        "Report Issue": "Reportar bugs",
+        "Folder is empty": "Aún no hay archivos ni carpetas aquí.",
+        "Are you sure want to": "Estas seguro de querer"
       }
     },
     {
