@@ -25,10 +25,7 @@ $use_auth = true;
 // Login user name and password
 // Users: array('Username' => 'Password', 'Username2' => 'Password2', ...)
 // Generate secure password hash - https://tinyfilemanager.github.io/docs/pwd.html
-$auth_users = array(
-    'admin' => '$2y$10$/K.hjNr84lLNDt8fTXjoI.DBp6PpeyoJ.mGwrrLuCZfAwfSAGqhOW', //admin@123
-    'user' => '$2y$10$Fg6Dz8oH9fPoZ2jJan5tZuv6Z4Kp7avtQ9bDfrdRntXtPeiMAZyGO' //12345
-);
+$auth_users = json_decode(file_get_contents('auth_users.json'), true);
 
 // Readonly users
 // e.g. array('users', 'guest', ...)
@@ -55,12 +52,7 @@ $edit_files = true;
 
 // Default timezone for date() and time()
 // Doc - http://php.net/manual/en/timezones.php
-$default_timezone = 'Etc/UTC'; // UTC
-
-// Root path for file manager
-// use absolute path of directory i.e: '/var/www/folder' or $_SERVER['DOCUMENT_ROOT'].'/folder'
-//make sure update $root_url in next section
-$root_path = $_SERVER['DOCUMENT_ROOT'];
+$default_timezone = 'America/Caracas'; // UTC
 
 // Root url for links in file manager.Relative to $http_host. Variants: '', 'path/to/subfolder'
 // Will not working if $root_path will be outside of server document root
@@ -155,13 +147,22 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
+// Root path for file manager
+// use absolute path of directory i.e: '/var/www/folder' or $_SERVER['DOCUMENT_ROOT'].'/folder'
+//make sure update $root_url in next section
+
+// $root_path = $_SERVER['DOCUMENT_ROOT'];
+
+$root_path = $_ENV['ROOT_PATH'];
+
+# Environments of S3cmd
+
 $s3accessKey = $_ENV['S3_ACCESS_KEY'];
 $s3secretKey = $_ENV['S3_SECRET_KEY'];
 $s3hostName = $_ENV['S3_HOST_NAME'];
 $s3hostBucket = $_ENV['S3_HOST_BUCKET'];
 $bucket = $_ENV['S3_BUCKET'];
 $directory = $_ENV['S3_DIRECTORY'];
-
 
 // External CDN resources that can be used in the HTML (replace for GDPR compliance)
 $external = array(
@@ -3983,7 +3984,7 @@ function fm_show_nav_path($path)
 
             <?php
             $path = fm_clean_path($path);
-            $root_url = "<a href='?p='><i class='fa fa-home' aria-hidden='true' title='" . FM_ROOT_PATH . "'></i></a>";
+            $root_url = "<a href='?p='><i class='fa fa-home' aria-hidden='true' title='Inicio'></i></a>";
             $sep = '<i class="bread-crumb"> / </i>';
             if ($path != '') {
                 $exploded = explode('/', $path);
