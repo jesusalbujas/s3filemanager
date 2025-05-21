@@ -27,4 +27,4 @@ jobs:
         file: ./Dockerfile
         platforms: linux/amd64
         push: true
-        tags: ${{ secrets.DOCKER_REPO_S3FM }}:${{ github.event.release.tag_name }}
+        tags: jalbujas/s3filemanager:${{ github.event.release.tag_name }}
