@@ -153,7 +153,7 @@ $dotenv->load();
 
 // $root_path = $_SERVER['DOCUMENT_ROOT'];
 
-$root_path = $_ENV['ROOT_PATH'];
+$root_path = "/opt/files";
 
 # Environments of S3cmd
 
